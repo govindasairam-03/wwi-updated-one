@@ -51,6 +51,7 @@ export interface JobOpening {
   id: string;
   title: string;
   department?: string;
+  shortDescription?: string;
   description?: string;
   skills?: string;
   experience?: string;

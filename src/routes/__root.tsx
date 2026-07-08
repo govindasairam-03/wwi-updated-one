@@ -68,12 +68,12 @@ function HeadSync() {
   }
   const resolveUrl = (value: string) => (value.startsWith("http://") || value.startsWith("https://") ? value : new URL(value, SITE.url).href);
   const isNoIndex = meta.some((t) => t.name === "robots" && typeof t.content === "string" && t.content.includes("noindex"));
-  const title = meta.find((t) => "title" in t)?.title ?? SITE.name;
-  const description = meta.find((t) => t.name === "description")?.content ?? SITE.description;
-  const ogType = meta.find((t) => t.property === "og:type")?.content ?? "website";
-  const ogImage = meta.find((t) => t.property === "og:image")?.content ?? meta.find((t) => t.name === "twitter:image")?.content;
+  const title = [...meta].reverse().find((t) => "title" in t)?.title ?? SITE.name;
+  const description = [...meta].reverse().find((t) => t.name === "description")?.content ?? SITE.description;
+  const ogType = [...meta].reverse().find((t) => t.property === "og:type")?.content ?? "website";
+  const ogImage = [...meta].reverse().find((t) => t.property === "og:image")?.content ?? [...meta].reverse().find((t) => t.name === "twitter:image")?.content;
   const canonicalHref = (() => {
-    const canonical = links.find((l) => l.rel === "canonical")?.href;
+    const canonical = [...links].reverse().find((l) => l.rel === "canonical")?.href;
     if (canonical) return resolveUrl(canonical);
     if (isNoIndex) return undefined;
     return resolveUrl(pathname);

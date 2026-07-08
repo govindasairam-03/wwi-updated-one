@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { Outlet, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BackButton } from "../components/BackButton";
 import { Reveal } from "../components/Reveal";
-import { ApplyWizard } from "../components/ApplyWizard";
-import { ArrowDown, ArrowRight, MapPin, Briefcase, Clock, Lightbulb, Heart, Sparkles, Users, Loader2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowDown, ArrowRight, MapPin, Briefcase, Clock, Lightbulb, Heart, Sparkles, Users, Loader2, Send, FileText } from "lucide-react";
 import { api, type JobOpening } from "../lib/api";
 
 export const Route = createFileRoute("/careers")({
@@ -34,8 +34,11 @@ const benefits = [
 ];
 
 function CareersPage() {
-  const [open, setOpen] = useState<{ role: string; jobId?: string | number } | null>(null);
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  return pathname === "/careers" ? <CareersLandingPage /> : <Outlet />;
+}
 
+function CareersLandingPage() {
   const { data: jobs, isLoading, isError } = useQuery({
     queryKey: ["jobs"],
     queryFn: api.listJobs,
@@ -150,16 +153,30 @@ function CareersPage() {
                     <div className="flex flex-wrap gap-4 items-center p-6 rounded-2xl bg-card border border-border hover:border-foreground/40 transition-colors">
                       <div className="flex-1 min-w-[260px]">
                         <h3 className="font-semibold">{job.title}</h3>
-                        {job.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{job.description}</p>}
+                        {job.shortDescription && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{job.shortDescription}</p>}
+                        {!job.shortDescription && job.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{job.description}</p>}
                         <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
                           {job.location && <span className="inline-flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.location}</span>}
                           {job.employmentType && <span className="inline-flex items-center gap-1"><Briefcase className="w-3 h-3" /> {job.employmentType}</span>}
                           {job.experience && <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {job.experience}</span>}
                         </div>
                       </div>
-                      <button onClick={() => setOpen({ role: job.title, jobId: job.id })} className="inline-flex items-center gap-2 bg-foreground text-background rounded-full px-4 py-2 text-sm font-medium hover:opacity-90 transition">
-                        Apply Now <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                        <div className="flex flex-wrap gap-2">
+                          <Link
+                            to="/careers/$jobId"
+                            params={{ jobId: job.id }}
+                            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-secondary transition"
+                          >
+                            View Details <FileText className="w-3.5 h-3.5" />
+                          </Link>
+                          <Link
+                            to="/careers/$jobId/apply"
+                            params={{ jobId: job.id }}
+                            className="inline-flex items-center gap-2 bg-foreground text-background rounded-full px-4 py-2 text-sm font-medium hover:opacity-90 transition"
+                          >
+                            Apply Now <Send className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
                     </div>
                   </Reveal>
                 ))}
@@ -170,17 +187,18 @@ function CareersPage() {
                   <Sparkles className="w-5 h-5 mx-auto" />
                   <h3 className="mt-3 text-2xl font-bold">Don't see your role?</h3>
                   <p className="mt-2 text-sm text-background/70 max-w-xl mx-auto">We're always looking for talented people. Send us a general application and we'll reach out when a matching role opens up.</p>
-                  <button onClick={() => setOpen({ role: "General Application" })} className="mt-6 inline-flex items-center gap-2 bg-background text-foreground rounded-full px-5 py-2.5 text-sm font-medium">
-                    <Users className="w-4 h-4" /> General Application <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <Link
+                    to="/careers/apply"
+                    className="mt-6 inline-flex items-center gap-2 bg-background text-foreground rounded-full px-5 py-2.5 text-sm font-medium"
+                  >
+                    <Users className="w-4 h-4" /> Open General Application <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </Reveal>
             </>
           )}
         </div>
       </section>
-
-      {open && <ApplyWizard role={open.role} jobId={open.jobId} onClose={() => setOpen(null)} />}
     </>
   );
 }

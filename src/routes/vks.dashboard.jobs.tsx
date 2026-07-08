@@ -14,6 +14,7 @@ type JobForm = Omit<JobOpening, "id" | "createdAt">;
 const emptyJob: JobForm = {
   title: "",
   department: "",
+  shortDescription: "",
   description: "",
   skills: "",
   experience: "",
@@ -100,6 +101,7 @@ function JobModal({ initial, onClose, onSubmit }: { initial: JobForm | JobOpenin
   const [f, setF] = useState<JobForm>({
     title: initial.title ?? "",
     department: initial.department ?? "",
+    shortDescription: initial.shortDescription ?? "",
     description: initial.description ?? "",
     skills: initial.skills ?? "",
     experience: initial.experience ?? "",
@@ -120,6 +122,11 @@ function JobModal({ initial, onClose, onSubmit }: { initial: JobForm | JobOpenin
         <div className="p-5 overflow-y-auto grid sm:grid-cols-2 gap-3">
           <Field label="Title *" value={f.title} onChange={(v) => set("title", v)} />
           <Field label="Department" value={f.department ?? ""} onChange={(v) => set("department", v)} />
+          <div className="sm:col-span-2">
+            <label className="text-xs text-muted-foreground">Short Description</label>
+            <textarea value={f.shortDescription ?? ""} onChange={(e) => set("shortDescription", e.target.value)} rows={2}
+              className="mt-1 w-full bg-card border border-border rounded-lg px-3 py-2 text-sm resize-none" placeholder="A short one-line summary that appears in the careers list" />
+          </div>
           <Field label="Experience" value={f.experience ?? ""} onChange={(v) => set("experience", v)} />
           <Field label="Salary" value={f.salary ?? ""} onChange={(v) => set("salary", v)} />
           <Field label="Location" value={f.location ?? ""} onChange={(v) => set("location", v)} />
@@ -130,9 +137,9 @@ function JobModal({ initial, onClose, onSubmit }: { initial: JobForm | JobOpenin
           </label>
           <div className="sm:col-span-2"><Field label="Skills (comma separated)" value={f.skills ?? ""} onChange={(v) => set("skills", v)} /></div>
           <div className="sm:col-span-2">
-            <label className="text-xs text-muted-foreground">Description</label>
+            <label className="text-xs text-muted-foreground">Role Summary</label>
             <textarea value={f.description ?? ""} onChange={(e) => set("description", e.target.value)} rows={4}
-              className="mt-1 w-full bg-card border border-border rounded-lg px-3 py-2 text-sm resize-none" />
+              className="mt-1 w-full bg-card border border-border rounded-lg px-3 py-2 text-sm resize-none" placeholder="Long-form details about responsibilities, expectations, and benefits" />
           </div>
           <label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={f.remote ?? false} onChange={(e) => set("remote", e.target.checked)} /> Remote</label>
           <label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={f.published !== false} onChange={(e) => set("published", e.target.checked)} /> Published</label>

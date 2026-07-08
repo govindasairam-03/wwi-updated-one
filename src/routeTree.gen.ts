@@ -28,6 +28,8 @@ import { Route as ServicesMaintenanceSupportRouteImport } from './routes/service
 import { Route as ServicesMaintenanceRouteImport } from './routes/services.maintenance'
 import { Route as ServicesAppDevelopmentRouteImport } from './routes/services.app-development'
 import { Route as ServicesAppRouteImport } from './routes/services.app'
+import { Route as CareersApplyRouteImport } from './routes/careers.apply'
+import { Route as CareersJobIdRouteImport } from './routes/careers.$jobId'
 import { Route as BlogsSlugRouteImport } from './routes/blogs_.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as VksDashboardIndexRouteImport } from './routes/vks.dashboard.index'
@@ -36,6 +38,7 @@ import { Route as VksDashboardJobsRouteImport } from './routes/vks.dashboard.job
 import { Route as VksDashboardChangePasswordRouteImport } from './routes/vks.dashboard.change-password'
 import { Route as VksDashboardBlogsRouteImport } from './routes/vks.dashboard.blogs'
 import { Route as VksDashboardApplicationsRouteImport } from './routes/vks.dashboard.applications'
+import { Route as CareersJobIdApplyRouteImport } from './routes/careers.$jobId.apply'
 
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
   id: '/terms-of-service',
@@ -133,6 +136,16 @@ const ServicesAppRoute = ServicesAppRouteImport.update({
   path: '/services/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersApplyRoute = CareersApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => CareersRoute,
+} as any)
+const CareersJobIdRoute = CareersJobIdRouteImport.update({
+  id: '/$jobId',
+  path: '/$jobId',
+  getParentRoute: () => CareersRoute,
+} as any)
 const BlogsSlugRoute = BlogsSlugRouteImport.update({
   id: '/blogs_/$slug',
   path: '/blogs/$slug',
@@ -175,13 +188,18 @@ const VksDashboardApplicationsRoute =
     path: '/applications',
     getParentRoute: () => VksDashboardRoute,
   } as any)
+const CareersJobIdApplyRoute = CareersJobIdApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => CareersJobIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/blogs': typeof BlogsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -190,6 +208,8 @@ export interface FileRoutesByFullPath {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/admin/login': typeof AdminLoginRoute
   '/blogs/$slug': typeof BlogsSlugRoute
+  '/careers/$jobId': typeof CareersJobIdRouteWithChildren
+  '/careers/apply': typeof CareersApplyRoute
   '/services/app': typeof ServicesAppRoute
   '/services/app-development': typeof ServicesAppDevelopmentRoute
   '/services/maintenance': typeof ServicesMaintenanceRoute
@@ -198,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/services/web': typeof ServicesWebRoute
   '/services/web-services': typeof ServicesWebServicesRoute
   '/vks/dashboard': typeof VksDashboardRouteWithChildren
+  '/careers/$jobId/apply': typeof CareersJobIdApplyRoute
   '/vks/dashboard/applications': typeof VksDashboardApplicationsRoute
   '/vks/dashboard/blogs': typeof VksDashboardBlogsRoute
   '/vks/dashboard/change-password': typeof VksDashboardChangePasswordRoute
@@ -210,7 +231,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/blogs': typeof BlogsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -219,6 +240,8 @@ export interface FileRoutesByTo {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/admin/login': typeof AdminLoginRoute
   '/blogs/$slug': typeof BlogsSlugRoute
+  '/careers/$jobId': typeof CareersJobIdRouteWithChildren
+  '/careers/apply': typeof CareersApplyRoute
   '/services/app': typeof ServicesAppRoute
   '/services/app-development': typeof ServicesAppDevelopmentRoute
   '/services/maintenance': typeof ServicesMaintenanceRoute
@@ -226,6 +249,7 @@ export interface FileRoutesByTo {
   '/services/social-sphere': typeof ServicesSocialSphereRoute
   '/services/web': typeof ServicesWebRoute
   '/services/web-services': typeof ServicesWebServicesRoute
+  '/careers/$jobId/apply': typeof CareersJobIdApplyRoute
   '/vks/dashboard/applications': typeof VksDashboardApplicationsRoute
   '/vks/dashboard/blogs': typeof VksDashboardBlogsRoute
   '/vks/dashboard/change-password': typeof VksDashboardChangePasswordRoute
@@ -239,7 +263,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/blogs': typeof BlogsRoute
-  '/careers': typeof CareersRoute
+  '/careers': typeof CareersRouteWithChildren
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -248,6 +272,8 @@ export interface FileRoutesById {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/admin/login': typeof AdminLoginRoute
   '/blogs_/$slug': typeof BlogsSlugRoute
+  '/careers/$jobId': typeof CareersJobIdRouteWithChildren
+  '/careers/apply': typeof CareersApplyRoute
   '/services/app': typeof ServicesAppRoute
   '/services/app-development': typeof ServicesAppDevelopmentRoute
   '/services/maintenance': typeof ServicesMaintenanceRoute
@@ -256,6 +282,7 @@ export interface FileRoutesById {
   '/services/web': typeof ServicesWebRoute
   '/services/web-services': typeof ServicesWebServicesRoute
   '/vks/dashboard': typeof VksDashboardRouteWithChildren
+  '/careers/$jobId/apply': typeof CareersJobIdApplyRoute
   '/vks/dashboard/applications': typeof VksDashboardApplicationsRoute
   '/vks/dashboard/blogs': typeof VksDashboardBlogsRoute
   '/vks/dashboard/change-password': typeof VksDashboardChangePasswordRoute
@@ -279,6 +306,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/admin/login'
     | '/blogs/$slug'
+    | '/careers/$jobId'
+    | '/careers/apply'
     | '/services/app'
     | '/services/app-development'
     | '/services/maintenance'
@@ -287,6 +316,7 @@ export interface FileRouteTypes {
     | '/services/web'
     | '/services/web-services'
     | '/vks/dashboard'
+    | '/careers/$jobId/apply'
     | '/vks/dashboard/applications'
     | '/vks/dashboard/blogs'
     | '/vks/dashboard/change-password'
@@ -308,6 +338,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/admin/login'
     | '/blogs/$slug'
+    | '/careers/$jobId'
+    | '/careers/apply'
     | '/services/app'
     | '/services/app-development'
     | '/services/maintenance'
@@ -315,6 +347,7 @@ export interface FileRouteTypes {
     | '/services/social-sphere'
     | '/services/web'
     | '/services/web-services'
+    | '/careers/$jobId/apply'
     | '/vks/dashboard/applications'
     | '/vks/dashboard/blogs'
     | '/vks/dashboard/change-password'
@@ -336,6 +369,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/admin/login'
     | '/blogs_/$slug'
+    | '/careers/$jobId'
+    | '/careers/apply'
     | '/services/app'
     | '/services/app-development'
     | '/services/maintenance'
@@ -344,6 +379,7 @@ export interface FileRouteTypes {
     | '/services/web'
     | '/services/web-services'
     | '/vks/dashboard'
+    | '/careers/$jobId/apply'
     | '/vks/dashboard/applications'
     | '/vks/dashboard/blogs'
     | '/vks/dashboard/change-password'
@@ -357,7 +393,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   BlogsRoute: typeof BlogsRoute
-  CareersRoute: typeof CareersRoute
+  CareersRoute: typeof CareersRouteWithChildren
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -511,6 +547,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesAppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers/apply': {
+      id: '/careers/apply'
+      path: '/apply'
+      fullPath: '/careers/apply'
+      preLoaderRoute: typeof CareersApplyRouteImport
+      parentRoute: typeof CareersRoute
+    }
+    '/careers/$jobId': {
+      id: '/careers/$jobId'
+      path: '/$jobId'
+      fullPath: '/careers/$jobId'
+      preLoaderRoute: typeof CareersJobIdRouteImport
+      parentRoute: typeof CareersRoute
+    }
     '/blogs_/$slug': {
       id: '/blogs_/$slug'
       path: '/blogs/$slug'
@@ -567,8 +617,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VksDashboardApplicationsRouteImport
       parentRoute: typeof VksDashboardRoute
     }
+    '/careers/$jobId/apply': {
+      id: '/careers/$jobId/apply'
+      path: '/apply'
+      fullPath: '/careers/$jobId/apply'
+      preLoaderRoute: typeof CareersJobIdApplyRouteImport
+      parentRoute: typeof CareersJobIdRoute
+    }
   }
 }
+
+interface CareersJobIdRouteChildren {
+  CareersJobIdApplyRoute: typeof CareersJobIdApplyRoute
+}
+
+const CareersJobIdRouteChildren: CareersJobIdRouteChildren = {
+  CareersJobIdApplyRoute: CareersJobIdApplyRoute,
+}
+
+const CareersJobIdRouteWithChildren = CareersJobIdRoute._addFileChildren(
+  CareersJobIdRouteChildren,
+)
+
+interface CareersRouteChildren {
+  CareersJobIdRoute: typeof CareersJobIdRouteWithChildren
+  CareersApplyRoute: typeof CareersApplyRoute
+}
+
+const CareersRouteChildren: CareersRouteChildren = {
+  CareersJobIdRoute: CareersJobIdRouteWithChildren,
+  CareersApplyRoute: CareersApplyRoute,
+}
+
+const CareersRouteWithChildren =
+  CareersRoute._addFileChildren(CareersRouteChildren)
 
 interface VksDashboardRouteChildren {
   VksDashboardApplicationsRoute: typeof VksDashboardApplicationsRoute
@@ -597,7 +679,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   BlogsRoute: BlogsRoute,
-  CareersRoute: CareersRoute,
+  CareersRoute: CareersRouteWithChildren,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
